@@ -36,6 +36,7 @@ public class App {
     };
 
     public static void main(String[] args) throws Exception {
+      //  ApplicationContext 
         final Bootstrap bootstrap = new Bootstrap();
         bootstrap.init(classes);
     }

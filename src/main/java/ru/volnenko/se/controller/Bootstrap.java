@@ -22,15 +22,24 @@ import java.util.*;
  */
 public final class Bootstrap implements ServiceLocator {
 
-    private final ITaskRepository taskRepository = new TaskRepository();
+    private final ITaskRepository taskRepository;
 
-    private final IProjectRepository projectRepository = new ProjectRepository();
+    private final IProjectRepository projectRepository;
 
-    private final IProjectService projectService = new ProjectService(projectRepository);
+    private final IProjectService projectService;
 
-    private final ITaskService taskService = new TaskService(taskRepository, projectRepository);
+    private final ITaskService taskService;
 
-    private final IDomainService domainService = new DomainService(this);
+    private final IDomainService domainService;
+
+    public Bootstrap(ITaskRepository taskRepository, IProjectRepository projectRepository,
+                     IProjectService projectService, ITaskService taskService, IDomainService domainService) {
+        this.taskRepository = taskRepository;
+        this.projectRepository = projectRepository;
+        this.projectService = projectService;
+        this.taskService = taskService;
+        this.domainService = domainService;
+    }
 
     private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 

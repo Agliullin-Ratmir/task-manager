@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- api/repository-->
+  <bean id="ITaskRepository" class="ru.volnenko.se.repository.TaskRepository"/>
+  <bean id="IProjectRepository" class="ru.volnenko.se.repository.ProjectRepository"/>
+
+  <!-- api/repository-->
+  <bean id="IDomainService" class="ru.volnenko.se.service.DomainService">
+    <constructor-arg name="serviceLocator" ref="ServiceLocator"/>
+  </bean>
+  <bean id="IProjectService" class="ru.volnenko.se.service.ProjectService">
+    <constructor-arg name="projectRepository" ref="IProjectRepository"/>
+  </bean>
+  <bean id="ITaskService" class="ru.volnenko.se.service.TaskService">
+    <constructor-arg name="projectRepository" ref="IProjectRepository"/>
+    <constructor-arg name="taskRepository" ref="ITaskRepository"/>
+  </bean>
+
+  <!-- controller-->
+  <bean id="ServiceLocator" class="ru.volnenko.se.controller.Bootstrap">
+    <constructor-arg name="taskRepository" ref="ITaskRepository"/>
+    <constructor-arg name="projectRepository" ref="IProjectRepository"/>
+    <constructor-arg name="projectService" ref="IProjectService"/>
+    <constructor-arg name="taskService" ref="ITaskService"/>
+    <constructor-arg name="domainService" ref="IDomainService"/>
+  </bean>
+
+
+  <bean id="helpCommand" class="ru.volnenko.se.command.system.HelpCommand"/>
+  
+  <bean id="projectClearCommand" class="ru.volnenko.se.command.project.ProjectClearCommand"/>
+  <bean id="projectCreateCommand" class="ru.volnenko.se.command.project.ProjectCreateCommand"/>
+
+  <bean id="projectRemoveCommand" class="ru.volnenko.se.command.project.ProjectRemoveCommand"/>
+  <bean id="projectListCommand" class="ru.volnenko.se.command.project.ProjectListCommand"/>
+
+  <bean id="taskCreateCommand" class="ru.volnenko.se.command.task.TaskCreateCommand"/>
+  <bean id="taskClearCommand" class="ru.volnenko.se.command.task.TaskClearCommand"/>
+
+  <bean id="taskListCommand" class="ru.volnenko.se.command.task.TaskListCommand"/>
+  <bean id="taskRemoveCommand" class="ru.volnenko.se.command.task.TaskRemoveCommand"/>
+
+  <bean id="dataBinarySaveCommand" class="ru.volnenko.se.command.data.bin.DataBinarySaveCommand"/>
+  <bean id="dataBinaryLoadCommand" class="ru.volnenko.se.command.data.bin.DataBinaryLoadCommand"/>
+  <bean id="dataBinaryClearCommand" class="ru.volnenko.se.command.data.bin.DataBinaryClearCommand"/>
+
+  <bean id="dataJsonSaveCommand" class="ru.volnenko.se.command.data.json.DataJsonSaveCommand"/>
+  <bean id="dataJsonClearCommand" class="ru.volnenko.se.command.data.json.DataJsonClearCommand"/>
+  <bean id="dataJsonLoadCommand" class="ru.volnenko.se.command.data.json.DataJsonLoadCommand"/>
+
+
+  <bean id="dataXmlClearCommand" class="ru.volnenko.se.command.data.xml.DataXmlClearCommand"/>
+  <bean id="dataXmlSaveCommand" class="ru.volnenko.se.command.data.xml.DataXmlSaveCommand"/>
+  <bean id="dataXmlLoadCommand" class="ru.volnenko.se.command.data.xml.DataXmlLoadCommand"/>
+</beans>
