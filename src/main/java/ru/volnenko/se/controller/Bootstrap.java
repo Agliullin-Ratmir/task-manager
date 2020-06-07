@@ -33,22 +33,15 @@ public final class Bootstrap implements ServiceLocator {
 
     private final ITaskService taskService;
 
-    private IDomainService domainService;
+    private final IDomainService domainService;
 
     public Bootstrap(ITaskRepository taskRepository, IProjectRepository projectRepository,
-                     IProjectService projectService, ITaskService taskService) {//, IDomainService domainService) {
+                     IProjectService projectService, ITaskService taskService, IDomainService domainService) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
         this.projectService = projectService;
         this.taskService = taskService;
-    }
-
-    public void setDomainService(IDomainService domainService) {
-        if (this.domainService == null) {
-            this.domainService = domainService;
-        } else {
-            log.info("The field domainService is already setted!");
-        }
+        this.domainService = domainService;
     }
 
     private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();

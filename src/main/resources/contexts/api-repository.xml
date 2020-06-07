@@ -7,7 +7,8 @@
     <bean id="projectRepository" class="ru.volnenko.se.repository.ProjectRepository"/>
 
     <bean id="domainService" class="ru.volnenko.se.service.DomainService">
-        <property name="serviceLocator" ref="serviceLocator"/>
+        <constructor-arg name="projectService" ref="projectService"/>
+        <constructor-arg name="taskService" ref="taskService"/>
     </bean>
     <bean id="projectService" class="ru.volnenko.se.service.ProjectService">
         <constructor-arg name="projectRepository" ref="projectRepository"/>
