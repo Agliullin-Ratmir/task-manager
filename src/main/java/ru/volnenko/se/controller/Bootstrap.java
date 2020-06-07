@@ -16,11 +16,14 @@ import ru.volnenko.se.service.ProjectService;
 import ru.volnenko.se.service.TaskService;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author Denis Volnenko
  */
 public final class Bootstrap implements ServiceLocator {
+
+    private static Logger log = Logger.getLogger(Bootstrap.class.getName());
 
     private final ITaskRepository taskRepository;
 
@@ -30,15 +33,22 @@ public final class Bootstrap implements ServiceLocator {
 
     private final ITaskService taskService;
 
-    private final IDomainService domainService;
+    private IDomainService domainService;
 
     public Bootstrap(ITaskRepository taskRepository, IProjectRepository projectRepository,
-                     IProjectService projectService, ITaskService taskService, IDomainService domainService) {
+                     IProjectService projectService, ITaskService taskService) {//, IDomainService domainService) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
         this.projectService = projectService;
         this.taskService = taskService;
-        this.domainService = domainService;
+    }
+
+    public void setDomainService(IDomainService domainService) {
+        if (this.domainService == null) {
+            this.domainService = domainService;
+        } else {
+            log.info("The field domainService is already setted!");
+        }
     }
 
     private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();

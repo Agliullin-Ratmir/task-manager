@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="taskRepository" class="ru.volnenko.se.repository.TaskRepository"/>
+    <bean id="projectRepository" class="ru.volnenko.se.repository.ProjectRepository"/>
+
+    <bean id="domainService" class="ru.volnenko.se.service.DomainService">
+        <property name="serviceLocator" ref="serviceLocator"/>
+    </bean>
+    <bean id="projectService" class="ru.volnenko.se.service.ProjectService">
+        <constructor-arg name="projectRepository" ref="projectRepository"/>
+    </bean>
+    <bean id="taskService" class="ru.volnenko.se.service.TaskService">
+        <constructor-arg name="projectRepository" ref="projectRepository"/>
+        <constructor-arg name="taskRepository" ref="taskRepository"/>
+    </bean>
+</beans>

@@ -1,5 +1,7 @@
 package ru.volnenko.se;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.volnenko.se.command.data.bin.DataBinaryClearCommand;
 import ru.volnenko.se.command.data.bin.DataBinaryLoadCommand;
 import ru.volnenko.se.command.data.bin.DataBinarySaveCommand;
@@ -36,8 +38,8 @@ public class App {
     };
 
     public static void main(String[] args) throws Exception {
-      //  ApplicationContext 
-        final Bootstrap bootstrap = new Bootstrap();
+        ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
+        final Bootstrap bootstrap = (Bootstrap) context.getBean("serviceLocator");
         bootstrap.init(classes);
     }
 

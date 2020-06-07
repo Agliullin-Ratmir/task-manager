@@ -2,17 +2,26 @@ package ru.volnenko.se.service;
 
 import ru.volnenko.se.api.service.IDomainService;
 import ru.volnenko.se.api.service.ServiceLocator;
+import ru.volnenko.se.controller.Bootstrap;
 import ru.volnenko.se.entity.Domain;
+
+import java.util.logging.Logger;
 
 /**
  * @author Denis Volnenko
  */
 public final class DomainService implements IDomainService {
 
-    private final ServiceLocator serviceLocator;
+    private static Logger log = Logger.getLogger(DomainService.class.getName());
 
-    public DomainService(final ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
+    private ServiceLocator serviceLocator;
+
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        if (this.serviceLocator == null) {
+            this.serviceLocator = serviceLocator;
+        } else {
+            log.info("The field serviceLocator is already setted!");
+        }
     }
 
     @Override
