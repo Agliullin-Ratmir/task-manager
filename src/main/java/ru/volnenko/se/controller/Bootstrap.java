@@ -1,7 +1,8 @@
 package ru.volnenko.se.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationEventPublisher;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.api.repository.IProjectRepository;
 import ru.volnenko.se.api.repository.ITaskRepository;
 import ru.volnenko.se.api.service.IDomainService;
@@ -9,16 +10,9 @@ import ru.volnenko.se.api.service.IProjectService;
 import ru.volnenko.se.api.service.ITaskService;
 import ru.volnenko.se.api.service.ServiceLocator;
 import ru.volnenko.se.command.*;
-import ru.volnenko.se.error.CommandAbsentException;
 import ru.volnenko.se.error.CommandCorruptException;
-import ru.volnenko.se.repository.ProjectRepository;
-import ru.volnenko.se.repository.TaskRepository;
-import ru.volnenko.se.service.DomainService;
-import ru.volnenko.se.service.ProjectService;
-import ru.volnenko.se.service.TaskService;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * @author Denis Volnenko
@@ -74,6 +68,12 @@ public final class Bootstrap implements ServiceLocator {
         return commandList;
     }
 
+    private ApplicationEventPublisher publisher;
+    @Autowired
+    public void setPublisher(ApplicationEventPublisher publisher) {
+        this.publisher = publisher;
+    }
+
     @Autowired
     public void setCommandList(List<AbstractCommand> commandList) {
         this.commandList = commandList;
@@ -84,7 +84,6 @@ public final class Bootstrap implements ServiceLocator {
         final String cliDescription = command.description();
         if (cliCommand == null || cliCommand.isEmpty()) throw new CommandCorruptException();
         if (cliDescription == null || cliDescription.isEmpty()) throw new CommandCorruptException();
-        command.setBootstrap(this);
         commands.put(cliCommand, command);
     }
 
@@ -102,11 +101,12 @@ public final class Bootstrap implements ServiceLocator {
         String command = "";
         while (!"exit".equals(command)) {
             command = scanner.nextLine();
-            execute(command);
+            CommandEvent commandEvent = new CommandEvent(this, command);
+            publisher.publishEvent(commandEvent);
         }
     }
 
-    private void execute(final String command) throws Exception {
+    public void execute(final String command) throws Exception {
         if (command == null || command.isEmpty()) return;
         final AbstractCommand abstractCommand = commands.get(command);
         if (abstractCommand == null) return;

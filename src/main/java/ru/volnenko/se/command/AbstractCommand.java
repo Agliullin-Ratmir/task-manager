@@ -1,5 +1,6 @@
 package ru.volnenko.se.command;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.volnenko.se.controller.Bootstrap;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public abstract class AbstractCommand {
         return bootstrap;
     }
 
+    @Autowired
     public void setBootstrap(Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
     }
