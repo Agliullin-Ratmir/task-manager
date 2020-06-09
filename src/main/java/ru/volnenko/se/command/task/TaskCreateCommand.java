@@ -1,11 +1,26 @@
 package ru.volnenko.se.command.task;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Component;
+import ru.volnenko.se.api.repository.ITaskRepository;
 import ru.volnenko.se.command.AbstractCommand;
 
 /**
  * @author Denis Volnenko
  */
+@Component
+@DependsOn("taskRepository")
 public final class TaskCreateCommand extends AbstractCommand {
+
+    private ITaskRepository taskRepository;
+
+    @Autowired
+    @Qualifier("taskRepository")
+    public void setTaskRepository(ITaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     @Override
     public String command() {
@@ -22,7 +37,7 @@ public final class TaskCreateCommand extends AbstractCommand {
         System.out.println("[TASK CREATE]");
         System.out.println("ENTER NAME:");
         final String name = bootstrap.nextLine();
-        bootstrap.getTaskRepository().createTask(name);
+        taskRepository.createTask(name);
         System.out.println("[OK]");
         System.out.println();
     }

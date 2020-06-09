@@ -1,11 +1,25 @@
 package ru.volnenko.se.command.project;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Component;
+import ru.volnenko.se.api.service.IProjectService;
 import ru.volnenko.se.command.AbstractCommand;
 
 /**
  * @author Denis Volnenko
  */
+@Component
+@DependsOn("projectService")
 public final class ProjectCreateCommand extends AbstractCommand {
+
+    private IProjectService projectService;
+    @Autowired
+    @Qualifier("projectService")
+    public void setProjectService(IProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @Override
     public String description() {
@@ -22,7 +36,7 @@ public final class ProjectCreateCommand extends AbstractCommand {
         System.out.println("[PROJECT CREATE]");
         System.out.println("ENTER NAME:");
         final String name = bootstrap.nextLine();
-        bootstrap.getProjectRepository().createProject(name);
+        projectService.createProject(name);
         System.out.println("[OK]");
         System.out.println();
     }

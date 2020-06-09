@@ -2,6 +2,11 @@ package ru.volnenko.se.command.data.xml;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Component;
+import ru.volnenko.se.api.service.IDomainService;
 import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.constant.DataConstant;
 import ru.volnenko.se.entity.Domain;
@@ -12,7 +17,16 @@ import java.nio.file.Files;
 /**
  * @author Denis Volnenko
  */
+@Component
+@DependsOn("domainService")
 public final class DataXmlLoadCommand extends AbstractCommand {
+
+    private IDomainService domainService;
+    @Autowired
+    @Qualifier("domainService")
+    public void setDomainService(IDomainService domainService) {
+        this.domainService = domainService;
+    }
 
     @Override
     public String command() {
@@ -33,7 +47,7 @@ public final class DataXmlLoadCommand extends AbstractCommand {
         final String json = new String(bytes, "UTF-8");
         final ObjectMapper objectMapper = new XmlMapper();
         final Domain domain = objectMapper.readValue(json, Domain.class);
-        bootstrap.getDomainService().load(domain);
+        domainService.load(domain);
         System.out.println("[OK]");
     }
 

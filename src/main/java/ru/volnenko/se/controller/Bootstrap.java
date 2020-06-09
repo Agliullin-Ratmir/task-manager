@@ -1,5 +1,7 @@
 package ru.volnenko.se.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.volnenko.se.api.repository.IProjectRepository;
 import ru.volnenko.se.api.repository.ITaskRepository;
 import ru.volnenko.se.api.service.IDomainService;
@@ -22,8 +24,6 @@ import java.util.logging.Logger;
  * @author Denis Volnenko
  */
 public final class Bootstrap implements ServiceLocator {
-
-    private static Logger log = Logger.getLogger(Bootstrap.class.getName());
 
     private final ITaskRepository taskRepository;
 
@@ -68,6 +68,17 @@ public final class Bootstrap implements ServiceLocator {
         return domainService;
     }
 
+    private List<AbstractCommand> commandList;
+
+    public List<AbstractCommand> getCommandList() {
+        return commandList;
+    }
+
+    @Autowired
+    public void setCommandList(List<AbstractCommand> commandList) {
+        this.commandList = commandList;
+    }
+
     public void registry(final AbstractCommand command) {
         final String cliCommand = command.command();
         final String cliDescription = command.description();
@@ -77,20 +88,12 @@ public final class Bootstrap implements ServiceLocator {
         commands.put(cliCommand, command);
     }
 
-    public void registry(final Class... classes) throws InstantiationException, IllegalAccessException {
-        for (Class clazz: classes) registry(clazz);
+    public void registry() {
+        commandList.forEach(this::registry);
     }
 
-    public void registry(final Class clazz) throws IllegalAccessException, InstantiationException {
-        if (!AbstractCommand.class.isAssignableFrom(clazz)) return;
-        final Object command = clazz.newInstance();
-        final AbstractCommand abstractCommand = (AbstractCommand) command;
-        registry(abstractCommand);
-    }
-
-    public void init(final Class... classes) throws Exception {
-        if (classes == null || classes.length == 0) throw new CommandAbsentException();
-        registry(classes);
+    public void init() throws Exception {
+        registry();
         start();
     }
 

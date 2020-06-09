@@ -1,5 +1,11 @@
 package ru.volnenko.se.command.data.bin;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Component;
+import ru.volnenko.se.api.service.IProjectService;
+import ru.volnenko.se.api.service.ITaskService;
 import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.constant.DataConstant;
 import ru.volnenko.se.entity.Project;
@@ -11,7 +17,23 @@ import java.io.ObjectInputStream;
 /**
  * @author Denis Volnenko
  */
+@Component
+@DependsOn({"projectService", "taskService"})
 public final class DataBinaryLoadCommand extends AbstractCommand {
+
+    private IProjectService projectService;
+
+    private ITaskService taskService;
+    @Autowired
+    @Qualifier("projectService")
+    public void setProjectService(IProjectService projectService) {
+        this.projectService = projectService;
+    }
+    @Autowired
+    @Qualifier("taskService")
+    public void setTaskService(ITaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @Override
     public String command() {
@@ -38,13 +60,13 @@ public final class DataBinaryLoadCommand extends AbstractCommand {
     private void loadProjects(final Object value) {
         if (!(value instanceof Project[])) return;
         final Project[] projects = (Project[]) value;
-        bootstrap.getProjectService().load(projects);
+        projectService.load(projects);
     }
 
     private void loadTasks(final Object value) {
         if (!(value instanceof Task[])) return;
         final Task[] tasks = (Task[]) value;
-        bootstrap.getTaskService().load(tasks);
+        taskService.load(tasks);
     }
 
 }
