@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.volnenko.se.controller.Bootstrap;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * @author Denis Volnenko
@@ -16,7 +17,6 @@ public abstract class AbstractCommand {
         return bootstrap;
     }
 
-    @Autowired
     public void setBootstrap(Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
     }

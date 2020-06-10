@@ -40,7 +40,15 @@ public final class Bootstrap implements ServiceLocator {
 
     private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 
+    public Map<String, AbstractCommand> getCommands() {
+        return commands;
+    }
+
     private final Scanner scanner = new Scanner(System.in);
+
+    public Scanner getScanner() {
+        return scanner;
+    }
 
     public ITaskRepository getTaskRepository() {
         return taskRepository;
@@ -64,10 +72,6 @@ public final class Bootstrap implements ServiceLocator {
 
     private List<AbstractCommand> commandList;
 
-    public List<AbstractCommand> getCommandList() {
-        return commandList;
-    }
-
     private ApplicationEventPublisher publisher;
     @Autowired
     public void setPublisher(ApplicationEventPublisher publisher) {
@@ -84,6 +88,7 @@ public final class Bootstrap implements ServiceLocator {
         final String cliDescription = command.description();
         if (cliCommand == null || cliCommand.isEmpty()) throw new CommandCorruptException();
         if (cliDescription == null || cliDescription.isEmpty()) throw new CommandCorruptException();
+        command.setBootstrap(this);
         commands.put(cliCommand, command);
     }
 
@@ -104,13 +109,6 @@ public final class Bootstrap implements ServiceLocator {
             CommandEvent commandEvent = new CommandEvent(this, command);
             publisher.publishEvent(commandEvent);
         }
-    }
-
-    public void execute(final String command) throws Exception {
-        if (command == null || command.isEmpty()) return;
-        final AbstractCommand abstractCommand = commands.get(command);
-        if (abstractCommand == null) return;
-        abstractCommand.execute();
     }
 
     public List<AbstractCommand> getListCommand() {

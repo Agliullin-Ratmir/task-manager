@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.controller.Bootstrap;
 
 @Component
@@ -16,14 +17,21 @@ public class CommandListener implements ApplicationListener<CommandEvent> {
         this.bootstrap = bootstrap;
     }
 
-    @EventListener
-    @Async
     @Override
     public void onApplicationEvent(CommandEvent commandEvent) {
         try {
-            bootstrap.execute(commandEvent.getCommand());
+            execute(commandEvent.getCommand());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @Async("workExecutor")
+    void execute(final String command) throws Exception {
+        System.out.println(Thread.currentThread().getId());
+        if (command == null || command.isEmpty()) return;
+        final AbstractCommand abstractCommand = bootstrap.getCommands().get(command);
+        if (abstractCommand == null) return;
+        abstractCommand.execute();
     }
 }
