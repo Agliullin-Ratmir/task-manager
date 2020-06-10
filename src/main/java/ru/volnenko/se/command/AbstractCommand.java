@@ -1,6 +1,7 @@
 package ru.volnenko.se.command;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.volnenko.se.ScannerBean;
 import ru.volnenko.se.controller.Bootstrap;
 
 import java.io.IOException;
@@ -27,8 +28,14 @@ public abstract class AbstractCommand {
 
     public abstract String description();
 
+    private ScannerBean scanner;
+    @Autowired
+    public void setScanner(ScannerBean scanner) {
+        this.scanner = scanner;
+    }
+
     public String nextLine() {
-        return bootstrap.getScanner().nextLine();
+        return scanner.nextLine();
     }
 
     public Integer nextInteger() {

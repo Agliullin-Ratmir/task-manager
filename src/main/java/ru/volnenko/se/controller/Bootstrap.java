@@ -3,6 +3,7 @@ package ru.volnenko.se.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import ru.volnenko.se.CommandEvent;
+import ru.volnenko.se.ScannerBean;
 import ru.volnenko.se.api.repository.IProjectRepository;
 import ru.volnenko.se.api.repository.ITaskRepository;
 import ru.volnenko.se.api.service.IDomainService;
@@ -44,10 +45,10 @@ public final class Bootstrap implements ServiceLocator {
         return commands;
     }
 
-    private final Scanner scanner = new Scanner(System.in);
-
-    public Scanner getScanner() {
-        return scanner;
+    private ScannerBean scanner;
+    @Autowired
+    public void setScanner(ScannerBean scanner) {
+        this.scanner = scanner;
     }
 
     public ITaskRepository getTaskRepository() {
