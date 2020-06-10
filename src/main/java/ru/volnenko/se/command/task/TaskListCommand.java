@@ -3,8 +3,10 @@ package ru.volnenko.se.command.task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.api.repository.ITaskRepository;
 import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.entity.Task;
@@ -41,4 +43,8 @@ public final class TaskListCommand extends AbstractCommand {
         System.out.println();
     }
 
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('task-list')")
+    public void onApplicationEvent(CommandEvent commandEvent) {
+        execute();
+    }
 }

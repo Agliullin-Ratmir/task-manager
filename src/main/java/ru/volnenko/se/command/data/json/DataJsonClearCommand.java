@@ -1,6 +1,8 @@
 package ru.volnenko.se.command.data.json;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.constant.DataConstant;
 
@@ -29,4 +31,8 @@ public final class DataJsonClearCommand extends AbstractCommand {
         Files.deleteIfExists(file.toPath());
     }
 
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('data-json-clear')")
+    public void onApplicationEvent(CommandEvent commandEvent) throws Exception {
+        execute();
+    }
 }

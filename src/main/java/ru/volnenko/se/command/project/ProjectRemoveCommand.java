@@ -1,6 +1,8 @@
 package ru.volnenko.se.command.project;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.command.AbstractCommand;
 
 /**
@@ -21,7 +23,11 @@ public final class ProjectRemoveCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-
     }
 
+
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('project-remove')")
+    public void onApplicationEvent(CommandEvent commandEvent) {
+        execute();
+    }
 }

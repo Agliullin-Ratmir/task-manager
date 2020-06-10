@@ -3,7 +3,9 @@ package ru.volnenko.se.command.project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.api.repository.IProjectRepository;
 import ru.volnenko.se.api.service.IProjectService;
 import ru.volnenko.se.command.AbstractCommand;
@@ -38,4 +40,8 @@ public final class ProjectClearCommand extends AbstractCommand {
         System.out.println("[ALL PROJECTS REMOVED]");
     }
 
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('project-clear')")
+    public void onApplicationEvent(CommandEvent commandEvent) {
+        execute();
+    }
 }

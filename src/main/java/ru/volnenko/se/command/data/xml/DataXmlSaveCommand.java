@@ -6,7 +6,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.api.service.IDomainService;
 import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.constant.DataConstant;
@@ -53,4 +55,8 @@ public final class DataXmlSaveCommand extends AbstractCommand {
         System.out.println("[OK]");
     }
 
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('data-xml-save')")
+    public void onApplicationEvent(CommandEvent commandEvent) throws Exception {
+        execute();
+    }
 }

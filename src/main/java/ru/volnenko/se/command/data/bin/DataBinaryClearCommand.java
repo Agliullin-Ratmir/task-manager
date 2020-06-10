@@ -1,6 +1,8 @@
 package ru.volnenko.se.command.data.bin;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.constant.DataConstant;
 
@@ -27,6 +29,11 @@ public final class DataBinaryClearCommand extends AbstractCommand {
     public void execute() throws Exception {
         final File file = new File(DataConstant.FILE_BINARY);
         Files.deleteIfExists(file.toPath());
+    }
+
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('data-bin-clear')")
+    public void onApplicationEvent(CommandEvent commandEvent) throws Exception {
+        execute();
     }
 
 }

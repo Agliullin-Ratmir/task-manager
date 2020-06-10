@@ -3,7 +3,9 @@ package ru.volnenko.se.command.project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.api.service.IProjectService;
 import ru.volnenko.se.command.AbstractCommand;
 
@@ -39,6 +41,11 @@ public final class ProjectCreateCommand extends AbstractCommand {
         projectService.createProject(name);
         System.out.println("[OK]");
         System.out.println();
+    }
+
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('project-create')")
+    public void onApplicationEvent(CommandEvent commandEvent) {
+        execute();
     }
 
 }

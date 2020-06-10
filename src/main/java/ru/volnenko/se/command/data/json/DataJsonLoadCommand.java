@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.api.service.IDomainService;
 import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.constant.DataConstant;
@@ -58,4 +60,8 @@ public final class DataJsonLoadCommand extends AbstractCommand {
         return check;
     }
 
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('data-json-load')")
+    public void onApplicationEvent(CommandEvent commandEvent) throws Exception {
+        execute();
+    }
 }

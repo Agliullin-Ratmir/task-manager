@@ -1,6 +1,8 @@
 package ru.volnenko.se.command.task;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.command.AbstractCommand;
 
 /**
@@ -32,4 +34,8 @@ public final class TaskRemoveCommand extends AbstractCommand {
         System.out.println("[OK]");
     }
 
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('task-remove')")
+    public void onApplicationEvent(CommandEvent commandEvent) {
+        execute();
+    }
 }

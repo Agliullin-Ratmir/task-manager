@@ -1,6 +1,8 @@
 package ru.volnenko.se.command.data.xml;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.command.AbstractCommand;
 import ru.volnenko.se.constant.DataConstant;
 
@@ -29,4 +31,8 @@ public final class DataXmlClearCommand extends AbstractCommand {
         Files.deleteIfExists(file.toPath());
     }
 
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('data-xml-clear')")
+    public void onApplicationEvent(CommandEvent commandEvent) throws Exception {
+        execute();
+    }
 }

@@ -3,7 +3,9 @@ package ru.volnenko.se.command.data.bin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import ru.volnenko.se.CommandEvent;
 import ru.volnenko.se.api.service.IProjectService;
 import ru.volnenko.se.api.service.ITaskService;
 import ru.volnenko.se.command.AbstractCommand;
@@ -67,6 +69,11 @@ public final class DataBinaryLoadCommand extends AbstractCommand {
         if (!(value instanceof Task[])) return;
         final Task[] tasks = (Task[]) value;
         taskService.load(tasks);
+    }
+
+    @EventListener(condition = "#commandEvent.command.toLowerCase().contains('data-bin-load')")
+    public void onApplicationEvent(CommandEvent commandEvent) throws Exception {
+        execute();
     }
 
 }
