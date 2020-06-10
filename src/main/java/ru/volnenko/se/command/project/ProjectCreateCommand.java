@@ -37,7 +37,7 @@ public final class ProjectCreateCommand extends AbstractCommand {
     public void execute() {
         System.out.println("[PROJECT CREATE]");
         System.out.println("ENTER NAME:");
-        final String name = bootstrap.nextLine();
+        final String name = nextLine();
         projectService.createProject(name);
         System.out.println("[OK]");
         System.out.println();

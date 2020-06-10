@@ -27,4 +27,18 @@ public abstract class AbstractCommand {
 
     public abstract String description();
 
+    public String nextLine() {
+        return bootstrap.getScanner().nextLine();
+    }
+
+    public Integer nextInteger() {
+        final String value = nextLine();
+        if (value == null || value.isEmpty()) return null;
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

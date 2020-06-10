@@ -25,7 +25,7 @@ public final class TaskRemoveCommand extends AbstractCommand {
     public void execute() {
         System.out.println("[REMOVING TASK]");
         System.out.println("Enter task order index:");
-        final Integer orderIndex = bootstrap.nextInteger();
+        final Integer orderIndex = nextInteger();
         if (orderIndex == null) {
             System.out.println("Error! Incorrect order index...");
             System.out.println();

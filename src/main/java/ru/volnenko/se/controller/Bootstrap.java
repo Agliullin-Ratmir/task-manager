@@ -114,19 +114,4 @@ public final class Bootstrap implements ServiceLocator {
     public List<AbstractCommand> getListCommand() {
         return new ArrayList<>(commands.values());
     }
-
-    public String nextLine() {
-        return scanner.nextLine();
-    }
-
-    public Integer nextInteger() {
-        final String value = nextLine();
-        if (value == null || value.isEmpty()) return null;
-        try {
-            return Integer.parseInt(value);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
 }

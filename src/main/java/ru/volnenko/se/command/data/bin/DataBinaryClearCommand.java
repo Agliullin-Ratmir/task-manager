@@ -35,5 +35,4 @@ public final class DataBinaryClearCommand extends AbstractCommand {
     public void onApplicationEvent(CommandEvent commandEvent) throws Exception {
         execute();
     }
-
 }

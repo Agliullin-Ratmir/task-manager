@@ -38,7 +38,7 @@ public final class ProjectListCommand extends AbstractCommand {
     public void execute() {
         System.out.println("[PROJECT LIST]");
         int index = 1;
-        for (Project project: bootstrap.getProjectService().getListProject()) {
+        for (Project project: projectService.getListProject()) {
             System.out.println(index++ + ". " + project.getName());
         }
         System.out.println();
